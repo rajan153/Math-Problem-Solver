@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Math Problem Solver</title>
+    <style>
+      body {
+        font-family: "Calibri", sans-serif;
+        background: #f6f8fb;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 40px;
+        font-size: 2.5em;
+      }
+      .template-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-top: 40px;
+      }
+      .template-card {
+        background: #fff;
+        border: 2px solid #e0e0e0;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .template-card:hover {
+        border-color: #1bad83;
+        box-shadow: 0 8px 25px rgba(27, 173, 131, 0.15);
+        transform: translateY(-5px);
+      }
+      .template-card h2 {
+        color: #1bad83;
+        margin-bottom: 15px;
+        font-size: 1.8em;
+      }
+      .template-card p {
+        color: #666;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      .template-link {
+        display: inline-block;
+        background: #1bad83;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s ease;
+      }
+      .template-link:hover {
+        background: #159a6f;
+      }
+      .features {
+        margin-top: 40px;
+        text-align: center;
+      }
+      .features h3 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .feature-list {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        flex-wrap: wrap;
+      }
+      .feature {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        min-width: 200px;
+      }
+      .feature h4 {
+        color: #1bad83;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🧮 Math Problem Solver</h1>
+      <p
+        style="
+          text-align: center;
+          font-size: 1.2em;
+          color: #666;
+          margin-bottom: 40px;
+        "
+      >
+        Interactive calculators for Trigonometry and Compound Interest problems
+      </p>
+
+      <div class="template-grid">
+        <div class="template-card" onclick="window.location.href='/template1'">
+          <h2>📐 Trigonometry Calculator</h2>
+          <p>
+            Calculate Sec C + Cot A for right triangles using Pythagorean
+            triplets. Enter any two sides and get the complete solution with
+            step-by-step calculations.
+          </p>
+          <a href="/template1" class="template-link">Open Calculator</a>
+        </div>
+
+        <div class="template-card" onclick="window.location.href='/template2'">
+          <h2>💰 Compound Interest Calculator</h2>
+          <p>
+            Find interest rates and calculate compound amounts. Perfect for
+            solving interest-based problems with detailed step-by-step
+            solutions.
+          </p>
+          <a href="/template2" class="template-link">Open Calculator</a>
+        </div>
+      </div>
+
+      <div class="features">
+        <h3>✨ Features</h3>
+        <div class="feature-list">
+          <div class="feature">
+            <h4>🎯 Interactive Input</h4>
+            <p>Enter your values and get instant calculations</p>
+          </div>
+          <div class="feature">
+            <h4>📊 Step-by-Step Solutions</h4>
+            <p>Detailed breakdown of all calculations</p>
+          </div>
+          <div class="feature">
+            <h4>🎨 Beautiful Visualizations</h4>
+            <p>Professional math layouts with diagrams</p>
+          </div>
+          <div class="feature">
+            <h4>✅ Accurate Results</h4>
+            <p>Precise calculations with fraction support</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sec C + Cot A Solver</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: Calibri, sans-serif;
+      }
+      body {
+        background: #f6f8fb;
+        padding: 20px;
+        color: #333;
+        font-size: 27px;
+        font-weight: bold;
+      }
+      .container {
+        display: flex;
+        justify-content: center;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        gap: 80px;
+      }
+
+      .input-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 2px solid #e0e0e0;
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .input-group label {
+        min-width: 120px;
+        color: #333;
+      }
+
+      .input-group input {
+        padding: 8px 12px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 18px;
+        width: 100px;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #1bad83;
+      }
+
+      .calculate-btn {
+        background: #1bad83;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      .calculate-btn:hover {
+        background: #159a6f;
+      }
+
+      .error-message {
+        color: #dc3545;
+        background: #f8d7da;
+        padding: 10px;
+        border-radius: 6px;
+        margin-top: 10px;
+        display: none;
+      }
+
+      .triangle-diagram {
+        position: relative;
+        width: 240px;
+        height: 140px;
+        margin: 40px auto;
+      }
+
+      .side.ab {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        height: 140px;
+        background: black;
+      }
+
+      .side.bc {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 240px;
+        height: 4px;
+        background: black;
+      }
+
+      .side-ac-line {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+
+      .label {
+        position: absolute;
+        font-weight: bold;
+        background: white;
+        padding: 2px 6px;
+        border-radius: 6px;
+        box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+        color: black;
+      }
+
+      .point-a {
+        top: -20px;
+        left: -15px;
+        background-color: #ed8392;
+      }
+
+      .point-b {
+        bottom: -25px;
+        left: -15px;
+        background-color: #7bc3ec;
+      }
+
+      .point-c {
+        bottom: -25px;
+        right: -15px;
+        background-color: #b7f3f0;
+      }
+
+      .dimension {
+        position: absolute;
+        background: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+      }
+
+      .ab-label {
+        left: -40px;
+        top: 45px;
+        background: linear-gradient(to top, #f5faff, #3399ff);
+      }
+
+      .bc-label {
+        bottom: -35px;
+        left: 90px;
+        background: linear-gradient(to top, #f9fad6, #f3ddff);
+      }
+
+      .ac-label {
+        top: 40px;
+        right: 90px;
+        background: linear-gradient(to top, #f3ddff, #feb78a);
+      }
+
+      .formula-table {
+        background: #222;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px;
+        display: inline-block;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .explanation-box-1 {
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        display: flex;
+        flex-direction: column;
+        width: fit-content;
+        gap: 20px;
+        align-items: anchor-center;
+      }
+
+      .math-box {
+        border-radius: 12px;
+        padding: 10px 20px;
+        margin: 10px 0;
+        font-weight: bold;
+        display: inline-block;
+        text-align: center;
+      }
+
+      .fraction {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .line-by {
+        width: 40px;
+        height: 3px;
+        background: gray;
+      }
+
+      .linel-by {
+        width: 140px;
+        height: 3px;
+        background: white;
+      }
+
+      .fraction-container {
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        gap: 6px;
+      }
+
+      .answer-box {
+        font-size: 30px;
+        background-color: #1bad83;
+        color: white;
+        padding: 6px 20px;
+        border-radius: 10px;
+        font-weight: bold;
+        margin-left: 10px;
+        box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+      }
+      .formulaBoxUltimate {
+        width: 298px;
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        margin-top: 10px;
+      }
+      .arrow-img {
+        width: 50px;
+      }
+
+      .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .back-btn:hover {
+        background: #5a6268;
+      }
+    </style>
+  </head>
+  <body>
+    <button class="back-btn" onclick="window.location.href='/'">
+      ← Back to Home
+    </button>
+
+    <div class="container">
+      <div>
+        <div class="input-section">
+          <h3 style="margin-top: 0; color: #1bad83">
+            Enter Triangle Dimensions
+          </h3>
+          <div class="input-group">
+            <label>Perpendicular (AB):</label>
+            <input type="number" id="perpendicular" value="7" min="1" />
+          </div>
+          <div class="input-group">
+            <label>Base (BC):</label>
+            <input type="number" id="base" value="24" min="1" />
+          </div>
+          <button class="calculate-btn" onclick="calculateTrigonometry()">
+            Calculate
+          </button>
+          <div class="error-message" id="errorMessage"></div>
+        </div>
+
+        <div class="explanation-box-1" id="resultSection" style="display: none">
+          <div class="math-box">
+            <span
+              style="
+                background: #ed8392;
+                color: black;
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+              "
+              >A</span
+            >
+            <span
+              style="
+                background: #b7f3f0;
+                color: black;
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+              "
+              >C</span
+            >
+            -
+            <span
+              style="
+                background: #7bc3ec;
+                color: black;
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+              "
+              >B</span
+            >
+            <span
+              style="
+                background: #b7f3f0;
+                color: black;
+                padding: 4px 8px;
+                border-radius: 6px;
+                box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+              "
+              >C</span
+            >
+            = 1
+          </div>
+          <div
+            style="
+              border: 2px solid #ccc;
+              border-radius: 10px;
+              background: #f2f2f2;
+            "
+          >
+            <div class="math-box">
+              <div id="pythagoreanCheck"></div>
+              <div>
+                <img src="/static/arrow.png" alt="arrow" class="arrow-img" />
+              </div>
+              <div id="tripletInfo"></div>
+            </div>
+          </div>
+          <div class="fraction-container">
+            <span
+              >(Sec
+              <span
+                style="
+                  background: #b3d8f1;
+                  color: black;
+                  padding: 4px 8px;
+                  border-radius: 6px;
+                  box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+                "
+                >C</span
+              >
+              + Cot
+              <span
+                style="
+                  background: #f79ba2;
+                  color: black;
+                  padding: 4px 8px;
+                  border-radius: 6px;
+                  box-shadow: 3px 3px 4px rgba(181, 181, 181, 1.5);
+                "
+                >A</span
+              >) =</span
+            >
+            <div class="fraction">
+              <div id="secCNumerator"></div>
+              <div class="line-by"></div>
+              <div id="secCDenominator"></div>
+            </div>
+            <span>&nbsp;+&nbsp;</span>
+            <div class="fraction">
+              <div id="cotANumerator"></div>
+              <div class="line-by"></div>
+              <div id="cotADenominator"></div>
+            </div>
+          </div>
+          <div class="fraction-container" style="margin-left: 190px">
+            <span>=</span>
+            <div class="answer-box" id="finalAnswer"></div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column">
+        <div class="triangle-diagram">
+          <div class="side ab"></div>
+          <div class="side bc"></div>
+
+          <svg class="side-ac-line" width="240" height="140">
+            <!-- Triangle fill -->
+            <polygon
+              points="0,140 0,0 240,140"
+              fill="rgba(173, 216, 230, 0.2)"
+            />
+            <!-- Hypotenuse line (AC) -->
+            <line
+              x1="0"
+              y1="0"
+              x2="240"
+              y2="140"
+              stroke="black"
+              stroke-width="4"
+            />
+          </svg>
+
+          <div class="label point-a">A</div>
+          <div class="label point-b">B</div>
+          <div class="label point-c">C</div>
+          <div class="dimension ab-label" id="abDimension">7 cm</div>
+          <div class="dimension bc-label" id="bcDimension">24 cm</div>
+          <div class="dimension ac-label" id="acDimension">25 cm</div>
+        </div>
+        <div class="formulaBoxUltimate">
+          <div class="formula-table" style="border-radius: 10px 10px 0px 0px">
+            <div class="fraction-container">
+              Sec
+              <span
+                style="
+                  background: #b3d8f1;
+                  color: black;
+                  padding: 4px 8px;
+                  border-radius: 6px;
+                "
+                >C</span
+              >
+              =
+              <div class="fraction">
+                <div>Hypotenuse</div>
+                <div class="linel-by"></div>
+                <div>Base</div>
+              </div>
+            </div>
+          </div>
+          <div class="formula-table" style="border-radius: 0px 0px 10px 10px">
+            <div class="fraction-container">
+              Cot
+              <span
+                style="
+                  background: #f79ba2;
+                  color: black;
+                  padding: 4px 8px;
+                  border-radius: 6px;
+                "
+                >A</span
+              >
+              =
+              <div class="fraction">
+                <div>Perpendicular</div>
+                <div class="linel-by"></div>
+                <div>Base</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function calculateTrigonometry() {
+        const perpendicular = parseInt(
+          document.getElementById("perpendicular").value
+        );
+        const base = parseInt(document.getElementById("base").value);
+        const errorMessage = document.getElementById("errorMessage");
+        const resultSection = document.getElementById("resultSection");
+
+        // Clear previous errors
+        errorMessage.style.display = "none";
+
+        if (!perpendicular || !base || perpendicular <= 0 || base <= 0) {
+          errorMessage.textContent =
+            "Please enter valid positive numbers for both dimensions.";
+          errorMessage.style.display = "block";
+          return;
+        }
+
+        try {
+          const response = await fetch("/trigonometry", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              perpendicular: perpendicular,
+              base: base,
+            }),
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            // Update the display with calculated values
+            updateDisplay(data);
+            resultSection.style.display = "block";
+          } else {
+            errorMessage.textContent =
+              data.error || "An error occurred during calculation.";
+            errorMessage.style.display = "block";
+          }
+        } catch (error) {
+          errorMessage.textContent = "Network error. Please try again.";
+          errorMessage.style.display = "block";
+        }
+      }
+
+      function updateDisplay(data) {
+        // Update triangle dimensions
+        document.getElementById("abDimension").textContent =
+          data.triangle.perpendicular + " cm";
+        document.getElementById("bcDimension").textContent =
+          data.triangle.base + " cm";
+        document.getElementById("acDimension").textContent =
+          data.triangle.hypotenuse + " cm";
+
+        // Update Pythagorean check
+        const hypotenuse = data.triangle.hypotenuse;
+        const base = data.triangle.base;
+        const perpendicular = data.triangle.perpendicular;
+        const diff = hypotenuse - base;
+        const diffSquared = hypotenuse * hypotenuse - base * base;
+        const sqrtDiff = Math.sqrt(diffSquared);
+
+        document.getElementById(
+          "pythagoreanCheck"
+        ).textContent = `${hypotenuse} - ${base} = ${diff.toFixed(
+          2
+        )} &nbsp;&nbsp;&nbsp;&nbsp; ${hypotenuse}² - ${base}² = ${sqrtDiff.toFixed(
+          2
+        )}²`;
+
+        // Update triplet info - check if it's a Pythagorean triplet
+        const isTriplet =
+          Math.abs(
+            hypotenuse - Math.sqrt(perpendicular * perpendicular + base * base)
+          ) < 0.01;
+        const tripletText = isTriplet
+          ? `${perpendicular}, ${base}, ${hypotenuse} is a Pythagorean triplet`
+          : `${perpendicular}, ${base}, ${hypotenuse} forms a right triangle`;
+        document.getElementById("tripletInfo").textContent = tripletText;
+
+        // Update fractions
+        document.getElementById("secCNumerator").textContent =
+          data.sec_c.numerator;
+        document.getElementById("secCDenominator").textContent =
+          data.sec_c.denominator;
+        document.getElementById("cotANumerator").textContent =
+          data.cot_a.numerator;
+        document.getElementById("cotADenominator").textContent =
+          data.cot_a.denominator;
+
+        // Update final answer
+        document.getElementById(
+          "finalAnswer"
+        ).textContent = `${data.result.numerator} / ${data.result.denominator}`;
+      }
+
+      // Calculate on page load with default values
+      window.onload = function () {
+        calculateTrigonometry();
+      };
+    </script>
+  </body>
+</html>

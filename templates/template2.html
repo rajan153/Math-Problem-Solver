@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Compound Interest Layout</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: Calibri, sans-serif;
+        font-size: 27px;
+        font-weight: bold;
+        background: #fff;
+      }
+
+      .back-btn {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: #6c757d;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+
+      .back-btn:hover {
+        background: #5a6268;
+      }
+
+      .input-section {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        border: 2px solid #e0e0e0;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .input-group {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+      }
+
+      .input-group label {
+        min-width: 150px;
+        color: #333;
+        font-size: 20px;
+      }
+
+      .input-group input {
+        padding: 8px 12px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 18px;
+        width: 120px;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #1bad83;
+      }
+
+      .calculate-btn {
+        background: #1bad83;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .calculate-btn:hover {
+        background: #159a6f;
+      }
+
+      .error-message {
+        color: #dc3545;
+        background: #f8d7da;
+        padding: 10px;
+        border-radius: 6px;
+        margin-top: 10px;
+        display: none;
+      }
+
+      .container {
+        max-width: 1120px;
+        margin: auto;
+        display: flex;
+        gap: 0px;
+        box-shadow: 0 4px 8px rgba(-10, 0, 0, 4);
+        border-radius: 12px;
+        padding: 50px 86px;
+        position: relative;
+      }
+
+      .arrow-col {
+        width: 40px;
+        position: relative;
+        margin-right: 10px;
+      }
+
+      .arrow {
+        position: absolute;
+        left: 0;
+        font-size: 30px;
+        color: #888;
+      }
+
+      .arrow1 {
+        top: 50px;
+      }
+      .arrow2 {
+        top: 216px;
+      }
+      .arrow3 {
+        top: 369px;
+      }
+      .arrow4 {
+        top: 525px;
+      }
+      .arrow5 {
+        top: 647px;
+      }
+
+      .left-col {
+        flex: 1.2;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .right-col {
+        flex: 1.2;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        padding-left: 54px;
+      }
+
+      .step {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .bracket {
+        background: #ffeaea;
+        padding: 10px 20px;
+        display: flex;
+        align-items: center;
+        border-radius: 10px;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .fraction {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 0 5px;
+      }
+
+      .fraction .top {
+        padding: 3px 17px;
+      }
+
+      .fraction .bottom {
+        border-top: 2px solid #000;
+        padding: 0 6px;
+      }
+
+      .varbox {
+        padding: 3px 17px;
+        border-radius: 6px;
+        display: inline-block;
+        margin: 0 4px;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+      }
+
+      .numbox {
+        background: #ffffff;
+        padding: 2px 12px;
+        border-radius: 6px;
+        display: inline-block;
+        margin: 0 4px;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+        z-index: 2;
+      }
+
+      .highlight {
+        background: #1bad83;
+        color: white;
+        padding: 2px 12px;
+        border-radius: 6px;
+        box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15);
+        font-size: 30px;
+      }
+
+      .dashed-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        position: relative;
+        align-items: center;
+      }
+
+      .dashed-line {
+        width: 0;
+        border-left: 3px dashed #000;
+        height: 70px;
+        position: relative;
+        top: 5px;
+      }
+
+      .blackbox-inline {
+        background: #222;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 27px;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        gap: 10px;
+      }
+
+      .blackbox {
+        background: #222;
+        color: #fff;
+        padding: 15px;
+        border-radius: 10px;
+        box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        display: flex;
+        gap: 31px;
+      }
+
+      .blackbox-container {
+        position: relative;
+      }
+
+      .long-arrow {
+        position: absolute;
+        top: -12px;
+        left: 177px;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 94px;
+        background: white;
+        z-index: 1;
+        rotate: 270deg;
+      }
+
+      .long-arrow::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-left: 8px solid transparent;
+        border-right: 8px solid transparent;
+        border-top: 12px solid white;
+      }
+
+      .right-top-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #fff;
+        border: 3px dashed #6d6d6d;
+        padding: 10px;
+        border-radius: 12px;
+      }
+
+      .right-top-box img {
+        width: 90px;
+        height: 121px;
+      }
+
+      .vertical-content {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .calc-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .thirdBracket {
+        font-size: 100px;
+        font-weight: 100;
+      }
+
+      .num0 {
+        background: linear-gradient(to bottom, #f8baca, #a1c1e0);
+      }
+      .num1 {
+        background: linear-gradient(to bottom, #ebe0c7, #97b5bb);
+      }
+      .num2 {
+        background: linear-gradient(to bottom, #f3ddff, #f9fad7);
+      }
+      .num3 {
+        background: linear-gradient(to bottom, #ffbfbd, #c0eefc);
+      }
+      .num4 {
+        background: linear-gradient(to bottom, #f5dee7, #eeb8cc);
+      }
+      .num5 {
+        background: linear-gradient(to bottom, #ffb686, #f3ddff);
+      }
+      .num6 {
+        background: linear-gradient(to bottom, #ca8454, #fbf6f3);
+      }
+      .num7 {
+        background: linear-gradient(to bottom, #3399fe, #f0f7ff);
+      }
+      .num8 {
+        background: linear-gradient(to bottom, #b8ddff, #ffffff);
+      }
+      .num9 {
+        background: linear-gradient(to bottom, #f1fafb, #8dd6d8);
+      }
+    </style>
+  </head>
+  <body>
+    <button class="back-btn" onclick="window.location.href='/'">
+      ← Back to Home
+    </button>
+
+    <div class="input-section">
+      <h3 style="margin-top: 0; color: #1bad83; text-align: center">
+        Compound Interest Calculator
+      </h3>
+      <div class="input-group">
+        <label>Principal (₹):</label>
+        <input type="number" id="principal" value="12000" min="1" />
+      </div>
+      <div class="input-group">
+        <label>Amount (₹):</label>
+        <input type="number" id="amount" value="20736" min="1" />
+      </div>
+      <div class="input-group">
+        <label>Time (years):</label>
+        <input type="number" id="time" value="3" min="1" />
+      </div>
+      <div class="input-group">
+        <label>Calculate for (years):</label>
+        <input type="number" id="calcTime" value="2" min="1" />
+      </div>
+      <button class="calculate-btn" onclick="calculateInterest()">
+        Calculate
+      </button>
+      <div class="error-message" id="errorMessage"></div>
+    </div>
+
+    <div class="container" id="resultContainer" style="display: none">
+      <!-- Arrow Column -->
+      <div class="arrow-col">
+        <div class="arrow arrow1">➜</div>
+        <div class="arrow arrow2">➜</div>
+        <div class="arrow arrow3">➜</div>
+        <div class="arrow arrow4">➜</div>
+        <div class="arrow arrow5">➜</div>
+      </div>
+
+      <!-- Left Column -->
+      <div class="left-col">
+        <div class="step">
+          <span class="numbox" id="principalDisplay">12000</span>
+          <span>=</span>
+          <div class="bracket">
+            <span class="thirdBracket">[</span> 1 +
+            <span class="fraction">
+              <span class="top varbox R">r</span>
+              <span class="bottom">100</span>
+            </span>
+            <span class="thirdBracket">]</span> <sup id="timeDisplay">3</sup>
+          </div>
+          <span>=</span>
+          <span class="numbox" id="amountDisplay">20736</span>
+        </div>
+
+        <div
+          style="
+            position: relative;
+            left: 130px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 10px;
+          "
+        >
+          <div class="step">
+            <div class="bracket">
+              <span class="thirdBracket">[</span> 1 +
+              <span class="fraction">
+                <span class="top varbox R">r</span>
+                <span class="bottom">100</span>
+              </span>
+              <span class="thirdBracket">]</span><sup id="timeDisplay2">3</sup>
+            </div>
+            <span>=</span>
+            <span class="fraction">
+              <span class="top" id="amountTop">20736</span>
+              <span class="bottom" id="principalBottom">12000</span>
+            </span>
+          </div>
+
+          <div class="step">
+            <div class="bracket">
+              <span class="thirdBracket">[</span> 1 +
+              <span class="fraction">
+                <span class="top varbox R">r</span>
+                <span class="bottom">100</span>
+              </span>
+              <span class="thirdBracket">]</span><sup id="timeDisplay3">3</sup>
+            </div>
+            <span>=</span>
+            <span class="fraction">
+              <span class="top" id="simplifiedTop">216</span>
+              <span class="bottom" id="simplifiedBottom">125</span>
+            </span>
+          </div>
+
+          <div class="dashed-container">
+            <div class="bracket">
+              <span class="thirdBracket">[</span> 1 +
+              <span class="fraction">
+                <span class="top varbox R">r</span>
+                <span class="bottom">100</span>
+              </span>
+              <span class="thirdBracket">]</span>
+            </div>
+
+            <span>=</span>
+            <span class="fraction">
+              <span class="top"
+                ><span class="numbox num6" id="rootTop">6</span></span
+              >
+              <span class="bottom"
+                ><span class="numbox num5" id="rootBottom">5</span></span
+              >
+            </span>
+
+            <div class="dashed-line"></div>
+
+            <div class="step">
+              <span class="blackbox-inline" id="cubeInfo"
+                >6³ = 216<br />5³ = 125</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="step">
+          <span class="varbox R">r</span>
+          <span>=</span>
+          <span class="fraction">
+            <span class="top"
+              ><span class="numbox num1" id="rateNum">1</span></span
+            >
+            <span class="bottom"
+              ><span class="numbox num5" id="rateDen">5</span></span
+            >
+          </span>
+          <span>× 100</span>
+          <span class="varbox R" style="margin-left: 80px">r</span>
+          <span>=</span>
+          <span class="numbox" id="finalRate">20%</span>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="right-col">
+        <div class="right-top-box">
+          <img src="/static/interesticon.png" alt="icon" />
+          <div class="vertical-content">
+            <span>Interest Compounded Annually</span>
+
+            <!-- ARROW + BLACKBOX WRAPPER -->
+            <div class="blackbox-container">
+              <div class="long-arrow"></div>
+              <div class="blackbox" style="color: #000">
+                <span class="numbox" id="principalBox">12000</span>
+                <span class="numbox num3" id="timeBox">3</span>
+                <span class="numbox" id="amountBox">20736</span>
+              </div>
+            </div>
+
+            <span style="text-align: center">years</span>
+          </div>
+        </div>
+
+        <div class="blackbox" style="padding-left: 35px">
+          Amount of the same sum in <span id="calcTimeDisplay">2</span> years
+          at<br />
+          the same rate of compound interest
+        </div>
+
+        <div
+          style="
+            position: relative;
+            left: 126px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 20px;
+          "
+        >
+          <div class="calc-line">
+            <span>=</span>
+            <span class="numbox" id="calcPrincipal">12000</span>
+            <span class="bracket">
+              <span class="thirdBracket">[</span>1 +
+              <span class="fraction">
+                <span class="top" id="rateDisplay">20</span>
+                <span class="bottom">100</span>
+              </span>
+              <span class="thirdBracket">]</span> <sup id="calcTimeSup">2</sup>
+            </span>
+          </div>
+
+          <div class="calc-line">
+            <span>=</span>
+            <span class="numbox" id="calcPrincipal2">12000</span>
+            <span>×</span>
+            <span class="fraction">
+              <span class="top" id="rateFactorTop">6</span>
+              <span class="bottom" id="rateFactorBottom">5</span>
+            </span>
+            <span>×</span>
+            <span class="fraction">
+              <span class="top" id="rateFactorTop2">6</span>
+              <span class="bottom" id="rateFactorBottom2">5</span>
+            </span>
+          </div>
+
+          <div class="calc-line">
+            <span>=</span>
+            <span class="highlight" id="finalAmount">17280</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      async function calculateInterest() {
+        const principal = parseFloat(
+          document.getElementById("principal").value
+        );
+        const amount = parseFloat(document.getElementById("amount").value);
+        const time = parseInt(document.getElementById("time").value);
+        const calcTime = parseInt(document.getElementById("calcTime").value);
+        const errorMessage = document.getElementById("errorMessage");
+        const resultContainer = document.getElementById("resultContainer");
+
+        // Clear previous errors
+        errorMessage.style.display = "none";
+
+        if (
+          !principal ||
+          !amount ||
+          !time ||
+          !calcTime ||
+          principal <= 0 ||
+          amount <= 0 ||
+          time <= 0 ||
+          calcTime <= 0
+        ) {
+          errorMessage.textContent =
+            "Please enter valid positive numbers for all fields.";
+          errorMessage.style.display = "block";
+          return;
+        }
+
+        if (amount <= principal) {
+          errorMessage.textContent = "Amount must be greater than principal.";
+          errorMessage.style.display = "block";
+          return;
+        }
+
+        try {
+          // First, find the interest rate
+          const rateResponse = await fetch("/interest/rate", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              principal: principal,
+              amount: amount,
+              time: time,
+            }),
+          });
+
+          const rateData = await rateResponse.json();
+
+          if (!rateResponse.ok) {
+            errorMessage.textContent =
+              rateData.error || "Error calculating interest rate.";
+            errorMessage.style.display = "block";
+            return;
+          }
+
+          // Then, calculate the amount for the specified time
+          const amountResponse = await fetch("/interest/amount", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              principal: principal,
+              rate: rateData.rate_percent,
+              time: calcTime,
+            }),
+          });
+
+          const amountData = await amountResponse.json();
+
+          if (!amountResponse.ok) {
+            errorMessage.textContent =
+              amountData.error || "Error calculating amount.";
+            errorMessage.style.display = "block";
+            return;
+          }
+
+          // Update the display with calculated values
+          updateDisplay(
+            rateData,
+            amountData,
+            principal,
+            amount,
+            time,
+            calcTime
+          );
+          resultContainer.style.display = "flex";
+        } catch (error) {
+          errorMessage.textContent = "Network error. Please try again.";
+          errorMessage.style.display = "block";
+        }
+      }
+
+      function updateDisplay(
+        rateData,
+        amountData,
+        principal,
+        amount,
+        time,
+        calcTime
+      ) {
+        // Update basic values
+        document.getElementById("principalDisplay").textContent =
+          Math.round(principal);
+        document.getElementById("amountDisplay").textContent =
+          Math.round(amount);
+        document.getElementById("timeDisplay").textContent = time;
+        document.getElementById("timeDisplay2").textContent = time;
+        document.getElementById("timeDisplay3").textContent = time;
+
+        // Update ratio calculations
+        document.getElementById("amountTop").textContent = Math.round(amount);
+        document.getElementById("principalBottom").textContent =
+          Math.round(principal);
+        document.getElementById("simplifiedTop").textContent =
+          rateData.simplified_ratio.numerator;
+        document.getElementById("simplifiedBottom").textContent =
+          rateData.simplified_ratio.denominator;
+
+        // Update cube root calculations
+        const cubeRoot = Math.pow(
+          rateData.simplified_ratio.numerator /
+            rateData.simplified_ratio.denominator,
+          1 / time
+        );
+        const cubeRootFraction = simplifyFraction(cubeRoot);
+        document.getElementById("rootTop").textContent =
+          cubeRootFraction.numerator;
+        document.getElementById("rootBottom").textContent =
+          cubeRootFraction.denominator;
+
+        // Update cube info
+        document.getElementById("cubeInfo").innerHTML = `${
+          cubeRootFraction.numerator
+        }³ = ${Math.pow(cubeRootFraction.numerator, time)}<br>${
+          cubeRootFraction.denominator
+        }³ = ${Math.pow(cubeRootFraction.denominator, time)}`;
+
+        // Update rate calculation
+        const rateFraction = simplifyFraction(rateData.rate_percent / 100);
+        document.getElementById("rateNum").textContent = rateFraction.numerator;
+        document.getElementById("rateDen").textContent =
+          rateFraction.denominator;
+        document.getElementById("finalRate").textContent =
+          Math.round(rateData.rate_percent) + "%";
+
+        // Update right column
+        document.getElementById("principalBox").textContent =
+          Math.round(principal);
+        document.getElementById("timeBox").textContent = time;
+        document.getElementById("amountBox").textContent = Math.round(amount);
+        document.getElementById("calcTimeDisplay").textContent = calcTime;
+        document.getElementById("calcTimeSup").textContent = calcTime;
+
+        // Update calculation section
+        document.getElementById("calcPrincipal").textContent =
+          Math.round(principal);
+        document.getElementById("calcPrincipal2").textContent =
+          Math.round(principal);
+        document.getElementById("rateDisplay").textContent = Math.round(
+          rateData.rate_percent
+        );
+
+        // Update rate factors
+        const rateFactor = 1 + rateData.rate_percent / 100;
+        const rateFactorFraction = simplifyFraction(rateFactor);
+        document.getElementById("rateFactorTop").textContent =
+          rateFactorFraction.numerator;
+        document.getElementById("rateFactorBottom").textContent =
+          rateFactorFraction.denominator;
+        document.getElementById("rateFactorTop2").textContent =
+          rateFactorFraction.numerator;
+        document.getElementById("rateFactorBottom2").textContent =
+          rateFactorFraction.denominator;
+
+        // Update final amount
+        document.getElementById("finalAmount").textContent = Math.round(
+          amountData.amount
+        );
+      }
+
+      function simplifyFraction(decimal) {
+        const tolerance = 1e-6;
+        let h1 = 1,
+          h2 = 0,
+          k1 = 0,
+          k2 = 1;
+        let b = decimal;
+
+        do {
+          let a = Math.floor(b);
+          let aux = h1;
+          h1 = a * h1 + h2;
+          h2 = aux;
+          aux = k1;
+          k1 = a * k1 + k2;
+          k2 = aux;
+          b = 1 / (b - a);
+        } while (Math.abs(decimal - h1 / k1) > decimal * tolerance);
+
+        return { numerator: h1, denominator: k1 };
+      }
+
+      // Calculate on page load with default values
+      window.onload = function () {
+        calculateInterest();
+      };
+    </script>
+  </body>
+</html>
